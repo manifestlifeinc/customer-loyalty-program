@@ -3,8 +3,11 @@
   "version": "0.0.1",
   "description": "A customer loyalty program network",
   "scripts": {
-    "start": "node app.js",
+    "start": "composer card import -f admin@clp-network.card && node app.js",
     "test": "mocha --recursive"
+  },
+  "engines": {
+    "node": "^8.11.0"
   },
   "author": "Raheel",
   "email": "raheel.zubairy@ibm.com",

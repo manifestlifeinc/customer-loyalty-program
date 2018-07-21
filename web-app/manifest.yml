@@ -1,6 +1,8 @@
 applications:
 - disk_quota: 1024M
-  name: clp-on-ibm-blockchain
+  name: clp-ijk
+  routes:
+  -  route: clp-ijk.mybluemix.net
   buildpack: sdk-for-nodejs
   command: "npm start"
   path: "."

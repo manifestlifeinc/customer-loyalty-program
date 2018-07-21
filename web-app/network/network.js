@@ -1,12 +1,18 @@
 const AdminConnection = require('composer-admin').AdminConnection;
 const BusinessNetworkConnection = require('composer-client').BusinessNetworkConnection;
-const { BusinessNetworkDefinition, CertificateUtil, IdCard } = require('composer-common');
+const {
+  BusinessNetworkDefinition,
+  CertificateUtil,
+  IdCard
+} = require('composer-common');
 
 //declate namespace
 const namespace = 'org.clp.biznet';
 
 //in-memory card store for testing so cards are not persisted to the file system
-const cardStore = require('composer-common').NetworkCardStoreManager.getCardStore( { type: 'composer-wallet-inmemory' } );
+const cardStore = require('composer-common').NetworkCardStoreManager.getCardStore({
+  type: 'composer-wallet-inmemory'
+});
 
 //admin connection to the blockchain, used to deploy the business network
 let adminConnection;
@@ -31,14 +37,14 @@ async function importCardForIdentity(cardName, identity) {
 
   //declare metadata
   const metadata = {
-      userName: identity.userID,
-      version: 1,
-      enrollmentSecret: identity.userSecret,
-      businessNetwork: businessNetworkName
+    userName: identity.userID,
+    version: 1,
+    enrollmentSecret: identity.userSecret,
+    businessNetwork: businessNetworkName
   };
 
   //get connectionProfile from json, create Idcard
-  const connectionProfile = require('./local_connection.json');
+  const connectionProfile = require('./connection-profile.json');
   const card = new IdCard(metadata, connectionProfile);
 
   //import card
@@ -47,9 +53,9 @@ async function importCardForIdentity(cardName, identity) {
 
 
 /*
-* Reconnect using a different identity
-* @param {String} cardName The identity to use
-*/
+ * Reconnect using a different identity
+ * @param {String} cardName The identity to use
+ */
 async function useIdentity(cardName) {
 
   //disconnect existing connection
@@ -65,15 +71,15 @@ async function useIdentity(cardName) {
 module.exports = {
 
   /*
-  * Create Member participant and import card for identity
-  * @param {String} cardId Import card id for member
-  * @param {String} accountNumber Member account number as identifier on network
-  * @param {String} firstName Member first name
-  * @param {String} lastName Member last name
-  * @param {String} phoneNumber Member phone number
-  * @param {String} email Member email
-  */
- registerMember: async function (cardId, accountNumber,firstName, lastName, email, phoneNumber) {
+   * Create Member participant and import card for identity
+   * @param {String} cardId Import card id for member
+   * @param {String} accountNumber Member account number as identifier on network
+   * @param {String} firstName Member first name
+   * @param {String} lastName Member last name
+   * @param {String} phoneNumber Member phone number
+   * @param {String} email Member email
+   */
+  registerMember: async function (cardId, accountNumber, firstName, lastName, email, phoneNumber) {
     try {
 
       //connect as admin
@@ -105,8 +111,7 @@ module.exports = {
       await businessNetworkConnection.disconnect('admin@clp-network');
 
       return true;
-    }
-    catch(err) {
+    } catch (err) {
       //print and return error
       console.log(err);
       var error = {};
@@ -117,11 +122,11 @@ module.exports = {
   },
 
   /*
-  * Create Partner participant and import card for identity
-  * @param {String} cardId Import card id for partner
-  * @param {String} partnerId Partner Id as identifier on network
-  * @param {String} name Partner name
-  */
+   * Create Partner participant and import card for identity
+   * @param {String} cardId Import card id for partner
+   * @param {String} partnerId Partner Id as identifier on network
+   * @param {String} name Partner name
+   */
   registerPartner: async function (cardId, partnerId, name) {
 
     try {
@@ -151,8 +156,7 @@ module.exports = {
       await businessNetworkConnection.disconnect('admin@clp-network');
 
       return true;
-    }
-    catch(err) {
+    } catch (err) {
       //print and return error
       console.log(err);
       var error = {};
@@ -163,12 +167,12 @@ module.exports = {
   },
 
   /*
-  * Perform EarnPoints transaction
-  * @param {String} cardId Card id to connect to network
-  * @param {String} accountNumber Account number of member
-  * @param {String} partnerId Partner Id of partner
-  * @param {Integer} points Points value
-  */
+   * Perform EarnPoints transaction
+   * @param {String} cardId Card id to connect to network
+   * @param {String} accountNumber Account number of member
+   * @param {String} partnerId Partner Id of partner
+   * @param {Integer} points Points value
+   */
   earnPointsTransaction: async function (cardId, accountNumber, partnerId, points) {
 
     try {
@@ -193,8 +197,7 @@ module.exports = {
       await businessNetworkConnection.disconnect(cardId);
 
       return true;
-    }
-    catch(err) {
+    } catch (err) {
       //print and return error
       console.log(err);
       var error = {};
@@ -205,12 +208,12 @@ module.exports = {
   },
 
   /*
-  * Perform UsePoints transaction
-  * @param {String} cardId Card id to connect to network
-  * @param {String} accountNumber Account number of member
-  * @param {String} partnerId Partner Id of partner
-  * @param {Integer} points Points value
-  */
+   * Perform UsePoints transaction
+   * @param {String} cardId Card id to connect to network
+   * @param {String} accountNumber Account number of member
+   * @param {String} partnerId Partner Id of partner
+   * @param {Integer} points Points value
+   */
   usePointsTransaction: async function (cardId, accountNumber, partnerId, points) {
 
     try {
@@ -235,8 +238,7 @@ module.exports = {
       await businessNetworkConnection.disconnect(cardId);
 
       return true;
-    }
-    catch(err) {
+    } catch (err) {
       //print and return error
       console.log(err);
       var error = {};
@@ -247,10 +249,10 @@ module.exports = {
   },
 
   /*
-  * Get Member data
-  * @param {String} cardId Card id to connect to network
-  * @param {String} accountNumber Account number of member
-  */
+   * Get Member data
+   * @param {String} cardId Card id to connect to network
+   * @param {String} accountNumber Account number of member
+   */
   memberData: async function (cardId, accountNumber) {
 
     try {
@@ -268,8 +270,7 @@ module.exports = {
 
       //return member object
       return member;
-    }
-    catch(err) {
+    } catch (err) {
       //print and return error
       console.log(err);
       var error = {};
@@ -280,10 +281,10 @@ module.exports = {
   },
 
   /*
-  * Get Partner data
-  * @param {String} cardId Card id to connect to network
-  * @param {String} partnerId Partner Id of partner
-  */
+   * Get Partner data
+   * @param {String} cardId Card id to connect to network
+   * @param {String} partnerId Partner Id of partner
+   */
   partnerData: async function (cardId, partnerId) {
 
     try {
@@ -301,8 +302,7 @@ module.exports = {
 
       //return partner object
       return partner;
-    }
-    catch(err) {
+    } catch (err) {
       //print and return error
       console.log(err);
       var error = {};
@@ -313,10 +313,10 @@ module.exports = {
   },
 
   /*
-  * Get all partners data
-  * @param {String} cardId Card id to connect to network
-  */
-  allPartnersInfo : async function (cardId) {
+   * Get all partners data
+   * @param {String} cardId Card id to connect to network
+   */
+  allPartnersInfo: async function (cardId) {
 
     try {
       //connect to network with cardId
@@ -331,8 +331,7 @@ module.exports = {
 
       //return allPartners object
       return allPartners;
-    }
-    catch(err) {
+    } catch (err) {
       //print and return error
       console.log(err);
       var error = {};
@@ -342,9 +341,9 @@ module.exports = {
   },
 
   /*
-  * Get all EarnPoints transactions data
-  * @param {String} cardId Card id to connect to network
-  */
+   * Get all EarnPoints transactions data
+   * @param {String} cardId Card id to connect to network
+   */
   earnPointsTransactionsInfo: async function (cardId) {
 
     try {
@@ -360,8 +359,7 @@ module.exports = {
 
       //return earnPointsResults object
       return earnPointsResults;
-    }
-    catch(err) {
+    } catch (err) {
       //print and return error
       console.log(err);
       var error = {};
@@ -372,9 +370,9 @@ module.exports = {
   },
 
   /*
-  * Get all UsePoints transactions data
-  * @param {String} cardId Card id to connect to network
-  */
+   * Get all UsePoints transactions data
+   * @param {String} cardId Card id to connect to network
+   */
   usePointsTransactionsInfo: async function (cardId) {
 
     try {
@@ -390,8 +388,7 @@ module.exports = {
 
       //return usePointsResults object
       return usePointsResults;
-    }
-    catch(err) {
+    } catch (err) {
       //print and return error
       console.log(err);
       var error = {};
